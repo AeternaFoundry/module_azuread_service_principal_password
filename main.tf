@@ -7,5 +7,14 @@ resource "azuread_service_principal_password" "service_principal_passwords" {
   end_date_relative    = each.value.end_date_relative
   rotate_when_changed  = each.value.rotate_when_changed
   start_date           = each.value.start_date
+
+  dynamic "timeouts" {
+    for_each = each.value.timeouts != null ? [each.value.timeouts] : []
+    content {
+      create = timeouts.value.create
+      delete = timeouts.value.delete
+      read   = timeouts.value.read
+    }
+  }
 }
 
